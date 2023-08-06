@@ -1,0 +1,56 @@
+version: '3'
+services:
+  database-mysql:
+    container_name: mysql_container
+    image: mysql/mysql-server
+    ports:
+      - "3306:3306"
+    volumes:
+      - C:\Users\Home\docker\mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: docker_test
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: 1234
+      TZ: 'Asia/Seoul'
+
+  database-redis:
+    container_name: redis_container
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - C:\Users\Home\docker\redis:/data
+
+  database-mongo:
+    container_name: mongo_container
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - C:\Users\Home\docker\mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=docker_test
+
+  spring-boot:
+    container_name: spring-docker-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_URL=jdbc:mysql://host.docker.internal:3306/docker_test?serverTimezone=Asia/Seoul
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=1234
+      - MONGO_HOST=host.docker.internal
+      - MONGO_PORT=27017
+      - MONGO_URI=mongodb://root:1234@host.docker.internal:27017/docker_test?authSource=admin
+      - REDIS_HOST=host.docker.internal
+      - REDIS_PORT=6379
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database-mongo
+      - database-mysql
+      - database-redis

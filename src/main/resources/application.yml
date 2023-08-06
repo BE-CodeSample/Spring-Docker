@@ -12,6 +12,7 @@ spring:
       host: ${MONGO_HOST}
       port: ${MONGO_PORT}
       uri: ${MONGO_URI}
+      authentication-database: admin
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_URL}
@@ -19,7 +20,8 @@ spring:
     password: ${MYSQL_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
