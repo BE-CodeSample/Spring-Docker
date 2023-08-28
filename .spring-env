@@ -1,0 +1,8 @@
+REDIS_HOST=host.docker.internal
+REDIS_PORT=6380
+MONGO_HOST=host.docker.internal
+MONGO_PORT=27000
+MONGO_URI=mongodb://host.docker.internal:27000/docker
+MYSQL_URL=jdbc:mysql://host.docker.internal:31000/yourssu_docker?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=rootpwd

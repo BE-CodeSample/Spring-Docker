@@ -1,0 +1,49 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql_db
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: yourssu_docker
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpwd
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: rootpwd
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3307:3306"
+    env_file:
+      - .mysql-env
+    volumes:
+      - ./mysql:/var/lib/mysql
+  mongodb:
+    container_name: mongo_db
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27000:27017"
+    volumes:
+      - ./mongo:/data/db
+  redis:
+    container_name: redis_db
+    image: redis:latest
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis:/data
+  application:
+    container_name: my-spring
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .spring-env
+    depends_on:
+      - mysql
+      - mongodb
+      - redis
